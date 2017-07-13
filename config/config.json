@@ -1,0 +1,16 @@
+{
+  "port": 3000,
+  "mongoose": {
+    "local": "mongodb://localhost/myamazon",
+    "remote": "mongodb://root:abc123@ds155582.mlab.com:55582/myamazon"
+  },
+  "session": {
+    "secret": "Dima@#$",
+    "key": "sid",
+    "cookie": {
+      "path": "/",
+      "httpOnly": true,
+      "maxAge": null
+    }
+  }
+}
