@@ -10,10 +10,10 @@ router.post('/signup',function(req,res,next){
   user.password = req.body.password;
   user.email = req.body.email;
   User.findOne({email:req.body.email},function(err,existingUser){
-    debugger;
+    if(err) return next(err);
     if(existingUser){
       req.flash('errors', 'Account with that email address already exists');
-      return res.redirect('/accounts/signup');
+      return res.redirect('/signup');
     } else {
       user.save(function(err,user){
         if(err) return next(err);
