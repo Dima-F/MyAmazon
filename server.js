@@ -7,6 +7,7 @@ var ejsMate = require('ejs-mate');//for templating ejs
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
 var flash = require('express-flash');
+var passport = require('passport');
 var MongoStore = require('connect-mongo')(session);
 
 var app = express();
@@ -26,6 +27,8 @@ app.use(session({
     store:new MongoStore({url:config.get('mongoose:local'),autoReconnect:true})
 }));
 app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
 //views
 app.engine('ejs',ejsMate);
 app.set('view engine','ejs');

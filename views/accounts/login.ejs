@@ -1,16 +1,14 @@
 <%- layout('layout') -%>
 <div class="row">
   <div class="col-lg-4 col-lg-offset-4">
-    <% if(errors.length>0) { %>
+    <% if(message.length>0) { %>
       <div class="alert alert-danger alert-dismissible">
-        <%- errors %>
+        <%- message %>
         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
       </div>
     <% } %>
     <form method="post" class="form-signin">
-        <h2 class="form-signin-heading">Please sign up</h2>
-        <label for="inputName" class="sr-only">Name</label>
-        <input type="text" name="name" id="inputName" class="form-control" placeholder="Name" required autofocus>
+        <h2 class="form-signin-heading">Please log in</h2>
         <label for="inputEmail" class="sr-only">Email address</label>
         <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required>
         <label for="inputPassword" class="sr-only">Password</label>
@@ -20,7 +18,7 @@
             <input type="checkbox" value="remember-me"> Remember me
           </label>
         </div>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Log in</button>
       </form>
   </div>
 </div>
