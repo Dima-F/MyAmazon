@@ -1,19 +1,27 @@
 var express = require('express');
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
-var config = require('./config');
 var ejs = require('ejs');
 var ejsMate = require('ejs-mate');//for templating ejs
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
 var flash = require('express-flash');
 var passport = require('passport');
+var path = require('path');
 var MongoStore = require('connect-mongo')(session);
+//my modules
+var config = require('./config');
+var attachUser = require('./middlewares/attachUser');
+require('./libs/mongoose');//mongoose connecting
 
 var app = express();
-//mongoose connecting
-require('./libs/mongoose');
-//middleware
+
+//middlewares
+//views
+app.set('views', path.join(__dirname, 'views'));
+app.engine('ejs',ejsMate);
+app.set('view engine','ejs');
+
 app.use(express.static(__dirname + '/public'));
 app.use(morgan('dev'));
 app.use(bodyParser.json());
@@ -29,12 +37,13 @@ app.use(session({
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
-//views
-app.engine('ejs',ejsMate);
-app.set('view engine','ejs');
+// Initialize Passport
+var initPassport = require('./passport/init');
+initPassport(passport);
+app.use(attachUser);
 //routes
-var mainRoutes = require('./routes/main');
-var userRoutes = require('./routes/user');
+var mainRoutes = require('./routes/main')();
+var userRoutes = require('./routes/user')(passport);
 app.use(mainRoutes);
 app.use(userRoutes);
 

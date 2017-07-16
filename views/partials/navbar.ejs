@@ -7,8 +7,9 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">Project name</a>
+      <a class="navbar-brand" href="#">My Amazon</a>
     </div>
+    <!--
     <div id="navbar" class="navbar-collapse collapse">
       <form class="navbar-form navbar-right">
         <div class="form-group">
@@ -20,5 +21,33 @@
         <button type="submit" class="btn btn-success">Sign in</button>
       </form>
     </div>
+  -->
+
+    <ul class="nav navbar-nav navbar-right">
+      <% if(!user){ %>
+      <li>
+        <a class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenu" href="#">
+          Signup/Login
+          <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+          <li><a href="/signup">Signup</a></li>
+          <li><a href="/login">Login</a></li>
+        </ul>
+      </li>
+      <% } else { %>
+        <li>
+          <a class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenu" href="#">
+            <%= user.profile.name %>
+            <span class="caret"></span>
+
+          </a>
+          <ul class="dropdown-menu">
+            <li><a href="/profile">Profile</a></li>
+            <li><a href="/logout">Logout</a></li>
+          </ul>
+        </li>
+      <% } %>
+    </ul>
   </div>
 </nav>
