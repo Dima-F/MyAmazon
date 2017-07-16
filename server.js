@@ -12,6 +12,7 @@ var MongoStore = require('connect-mongo')(session);
 //my modules
 var config = require('./config');
 var attachUser = require('./middlewares/attachUser');
+var findCategories = require('./middlewares/findCategories');
 require('./libs/mongoose');//mongoose connecting
 
 var app = express();
@@ -28,7 +29,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(session({
-    cookie: { maxAge: 60000 },
     saveUninitialized: true,
     resave: 'true',
     secret: config.get('session:secret'),
@@ -40,12 +40,18 @@ app.use(passport.session());
 // Initialize Passport
 var initPassport = require('./passport/init');
 initPassport(passport);
+//use my middlewares
 app.use(attachUser);
+app.use(findCategories);
 //routes
+var apiRoutes = require('./api/index');
 var mainRoutes = require('./routes/main')();
 var userRoutes = require('./routes/user')(passport);
+var adminRoutes = require('./routes/admin')();
+app.use('/api',apiRoutes);
 app.use(mainRoutes);
 app.use(userRoutes);
+app.use(adminRoutes);
 
 
 app.listen(config.get('port'),function(err){

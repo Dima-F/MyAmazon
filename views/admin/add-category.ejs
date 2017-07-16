@@ -1,0 +1,17 @@
+<%- layout('layout') -%>
+<div class="row">
+  <div class="col-lg-4 col-lg-offset-4">
+    <% if(message.length>0) { %>
+      <div class="alert alert-success alert-dismissible">
+        <%- message %>
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+      </div>
+    <% } %>
+    <form method="post" class="form-category">
+        <h2 class="form-signin-heading">Add a new Category</h2>
+        <label for="inputCategory" class="sr-only">Name:</label>
+        <input type="text" name="name" id="inputCategory" class="form-control" placeholder="Category name" required>
+        <button class="btn btn-lg btn-success btn-block" type="submit">Save</button>
+      </form>
+  </div>
+</div>
