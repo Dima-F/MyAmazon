@@ -37,6 +37,27 @@ module.exports = function(passport){
   router.get('/profile', isAuthenticated, function(req, res){
 		res.render('accounts/profile', { user: req.user });
 	});
+	/* GET edit-profile Page */
+	router.get('/edit-profile',isAuthenticated, function(req,res){
+		res.render('accounts/edit-profile',{message:req.flash('success')});
+	});
+	/* POST  edit-profile Page */
+	router.post('/edit-profile',isAuthenticated, function(req,res,next){
+		User.findOne({_id:req.user._id},function(err,user){
+			if(err) next(err);
+			if(req.body.name){
+				user.profile.name = req.body.name;
+			}
+			if(req.body.address){
+				user.profile.address = req.body.address;
+			}
+			user.save(function(err){
+				if(err) next(err);
+				req.flash('success','Your profile was successfully edited!');
+				res.redirect('/edit-profile');
+			});
+		});
+	});
   /* Handle Logout */
 	router.get('/logout', function(req, res) {
 		req.logout();

@@ -9,9 +9,9 @@ var UserSchema = new  Schema({
   password:{type:String},
   profile:{
     name:{type:String, default:''},
-    picture:{type:String, default:''}
+    picture:{type:String, default:''},
+    address:{type:String, default:''},
   },
-  address:String,
   history:[{
     date:Date,
     paid:{type:Number, default:0},
