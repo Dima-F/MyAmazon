@@ -44,7 +44,7 @@ initPassport(passport);
 app.use(attachUser);
 app.use(findCategories);
 //routes
-var apiRoutes = require('./api/index');
+var apiRoutes = require('./api')();
 var mainRoutes = require('./routes/main')();
 var userRoutes = require('./routes/user')(passport);
 var adminRoutes = require('./routes/admin')();
