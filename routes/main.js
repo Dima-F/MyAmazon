@@ -24,10 +24,37 @@ stream.on('error',function(err){
   console.log(err);
 });
 
+function paginate(req,res,next){
+  var perPage = 9;
+  var page = req.params.page;
+  Product
+    .find()
+    .skip(perPage*page)
+    .limit(perPage)
+    .populate('category')
+    .exec(function(err, products){
+      if(err) return next(err);
+      Product.count().exec(function(err, count){
+        if(err) return next(err);
+        res.render('main/product-main',{
+          products:products,
+          pages:count/perPage
+        });
+      });
+    });
+}
+
 //routes
 module.exports = function(){
   router.get('/',function(req,res,next){
-    res.render('main/home');
+    if(!req.user){
+      res.render('main/home');
+    } else {
+      paginate(req,res,next);
+    }
+  });
+  router.get('/page/:page',function(req,res,next){
+    paginate(req,res,next);
   });
   router.get('/about',function(req,res,next){
     res.render('main/about');
