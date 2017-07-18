@@ -7,11 +7,12 @@
         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
       </div>
     <% } %>
-    <form method="post" class="form-category">
+    <form method="post">
         <h2 class="form-signin-heading">Add a new Category</h2>
-        <label for="inputCategory" class="sr-only">Name:</label>
-        <input type="text" name="name" id="inputCategory" class="form-control" placeholder="Category name" required>
-        <button class="btn btn-lg btn-success btn-block" type="submit">Save</button>
+        <div class="form-group">
+          <input type="text" name="name" class="form-control" placeholder="Category name" required>
+        </div>
+        <button class="btn btn-lg btn-success" type="submit">Save</button>
       </form>
   </div>
 </div>

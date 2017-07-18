@@ -9,7 +9,7 @@ var flash = require('express-flash');
 var passport = require('passport');
 var path = require('path');
 var MongoStore = require('connect-mongo')(session);
-//my modules
+//my modules & middlewares
 var config = require('./config');
 var attachUser = require('./middlewares/attachUser');
 var findCategories = require('./middlewares/findCategories');
@@ -40,7 +40,7 @@ app.use(passport.session());
 // Initialize Passport
 var initPassport = require('./passport/init');
 initPassport(passport);
-//use my middlewares
+//use custom middlewares
 app.use(attachUser);
 app.use(findCategories);
 //routes
@@ -53,6 +53,31 @@ app.use(mainRoutes);
 app.use(userRoutes);
 app.use(adminRoutes);
 
+// when get here, then error 404
+app.use(function(req, res, next) {
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
+// error handler
+app.use(function(err, req, res, next) {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  if(!err.status){
+    err.status=500;
+  }
+  res.locals.error = req.app.get('env') === 'development' ? err :
+  {
+    message:err.message,
+    status:err.status,
+    stack:'Relax and have fun &#9749;'
+  };
+
+  // render the error page
+  res.status(err.status);
+  res.render('error');
+  console.error(err);
+});
 
 app.listen(config.get('port'),function(err){
   if(err) throw err;

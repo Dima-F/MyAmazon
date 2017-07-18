@@ -7,14 +7,14 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="/">My Amazon</a>
+      <a class="navbar-brand" href="/">My<span class="fa fa-amazon fa-lg"></span>mazon</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <form class="navbar-form navbar-left" method="post" action="/search">
         <div class="form-group">
           <input type="text" placeholder="Search..." name="q" class="form-control">
         </div>
-        <button type="submit" class="btn btn-default">Search</button>
+        <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
       </form>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -23,21 +23,20 @@
           <span class="caret"></span>
         </a>
           <ul class="dropdown-menu">
-            <% for(var i=0;i<categories.length;i++) { %>
+            <% categories.forEach(function(category){ %>
               <li>
-                <a href='/products/<%= categories[i]._id %>'>
-                  <%= categories[i].name %>
+                <a href='/products/<%= category._id %>'>
+                  <%= category.name %>
                 </a>
               </li>
-              <% } %>
+              <% }); %>
           </ul>
         </li>
         <% if(!user){ %>
           <li>
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-          Signup/Login
-          <span class="caret"></span>
-        </a>
+          <i class="fa fa-sign-in fa-lg"></i>
+          </a>
             <ul class="dropdown-menu">
               <li><a href="/signup">Signup</a></li>
               <li><a href="/login">Login</a></li>
@@ -46,12 +45,12 @@
           <% } else { %>
             <li>
               <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                <span class="fa fa-user"></span>&nbsp;
                 <%= user.profile.name %>
-                  <span class="caret"></span>
-
+                <span class="fa fa-caret-down"></span>
               </a>
               <ul class="dropdown-menu">
-                <li><a href="/profile">Profile</a></li>
+                <li><a href="/profile">Profile</li>
                 <li><a href="/logout">Logout</a></li>
               </ul>
             </li>

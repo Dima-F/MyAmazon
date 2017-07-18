@@ -7,20 +7,26 @@
         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
       </div>
     <% } %>
-    <form method="post" class="form-signin">
+    <form method="post">
         <h2 class="form-signin-heading">Please sign up</h2>
-        <label for="inputName" class="sr-only">Name</label>
-        <input type="text" name="name" id="inputName" class="form-control" placeholder="Name" required autofocus>
-        <label for="inputEmail" class="sr-only">Email address</label>
-        <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required>
-        <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
+        <div class="form-group">
+          <label for="inputName">Name</label>
+          <input type="text" name="name" class="form-control" placeholder="Name" required autofocus>
+        </div>
+        <div class="form-group">
+          <label for="inputEmail">Email address</label>
+          <input type="email" name="email" class="form-control" placeholder="Email address" required>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword">Password</label>
+          <input type="password" name="password" class="form-control" placeholder="Password" required>
+        </div>
         <div class="checkbox">
           <label>
             <input type="checkbox" value="remember-me"> Remember me
           </label>
         </div>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
+        <button class="btn btn-lg btn-primary" type="submit">Sign up</button>
       </form>
   </div>
 </div>

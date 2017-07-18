@@ -7,15 +7,15 @@ $(function(){
       url:'/api/search',
       data: { search_term },
       dataType:'json',
-      success:function(json){
-        var data = json.hits.hits.map(function(hit){
+      success:function(results){
+        var data = results.hits.hits.map(function(hit){
           return hit;
         });
         $('#searchResults').empty();
         data.forEach(function(val){
           var html="";
           html+='<div class="col-md-4">';
-          html+='<a href="/product/'+val._source._id +'">';
+          html+='<a href="/product/'+val._id +'">';
           html+='<div class="thumbnail">';
           html+='<img src="' + val._source.image +'">';
           html+='<div class="caption">';
