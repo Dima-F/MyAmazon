@@ -13,6 +13,7 @@ var MongoStore = require('connect-mongo')(session);
 var config = require('./config');
 var attachUser = require('./middlewares/attachUser');
 var findCategories = require('./middlewares/findCategories');
+var attachCart = require('./middlewares/attachCart');
 require('./libs/mongoose');//mongoose connecting
 
 var app = express();
@@ -42,6 +43,7 @@ var initPassport = require('./passport/init');
 initPassport(passport);
 //use custom middlewares
 app.use(attachUser);
+app.use(attachCart);
 app.use(findCategories);
 //routes
 var apiRoutes = require('./api')();

@@ -27,6 +27,7 @@
     "morgan": "^1.8.2",
     "nconf": "^0.8.4",
     "passport": "^0.3.2",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "stripe": "^4.23.1"
   }
 }

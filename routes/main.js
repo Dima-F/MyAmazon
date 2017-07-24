@@ -1,28 +1,11 @@
 var router = require('express').Router();
 var Product = require('../models/product');
+var Cart = require('../models/cart');
+var elasticConfig = require('../libs/elasticConfig');
+var stripe = require('stripe')('sk_test_kTg6IafxY2wEljjiWCGKX9E1');
 
-//mongoosastic configuration
-Product.createMapping(function(err, mapping) {
-  if (err) {
-    console.log('Error creating mapping');
-    console.log(err);
-  } else {
-    console.log('Mapping created');
-    console.log(mapping);
-  }
-});
-
-var stream = Product.synchronize();
-var count = 0;
-stream.on('data', function() {
-  count++;
-});
-stream.on('close', function() {
-  console.log('Indexed ' + count + ' documents');
-});
-stream.on('error', function(err) {
-  console.log(err);
-});
+//Elastic search configuration
+elasticConfig(Product);
 
 function paginate(req, res, next) {
   var perPage = 9;
@@ -83,6 +66,21 @@ module.exports = function() {
       });
     });
   });
+  router.post('/product/:id',function(req,res,next){
+    Cart.findOne({owner:req.user._id}, function(err,cart){
+      if(err) return next(err);
+      cart.items.push({
+        item:req.body.product_id,
+        price:parseFloat(req.body.priceValue),
+        quantity:parseInt(req.body.quantity)
+      });
+      cart.total = (cart.total + parseFloat(req.body.priceValue)).toFixed(2);
+      cart.save(function(err){
+        if(err) return next(err);
+        return res.redirect('/cart');
+      });
+    });
+  });
   //search routes...
   router.post('/search', function(req, res, next) {
     res.redirect('/search?q=' + req.body.q);
@@ -103,6 +101,45 @@ module.exports = function() {
           data: data
         });
       });
+  });
+  router.get('/cart',function(req,res,next){
+    Cart
+      .findOne({owner:req.user._id})
+      .populate('items.item')
+      .exec(function(err,cart){
+        if(err) return next(err);
+        res.render('main/cart',{
+          shoppingCart:cart,
+          message:req.flash('remove')
+        });
+      });
+  });
+  router.post('/remove',function(req,res,next){
+    Cart.findOne({owner:req.user._id},function(err, foundCart){
+      if(err) return next(err);
+      foundCart.items.pull(String(req.body.itemId));
+      foundCart.total = (foundCart.total-parseFloat(req.body.price)).toFixed(2);
+      foundCart.save(function(err){
+        if(err) return next(err);
+        req.flash('remove','Successfully removed');
+        res.redirect('/cart');
+      });
+    });
+  });
+
+  router.post('/payment',function(req,res,next){
+    var stripeToken = req.body.stripeToken;
+    var currentCharges = Math.round(req.body.stripeMoney * 100);
+    stripe.customers.create({
+      source:stripeToken
+    }).then(function(customer){
+      return stripe.charges.create({
+        amount:currentCharges,
+        currency:'usd',
+        customer:customer.id
+      });
+    });
+    res.redirect('/profile');
   });
   return router;
 };
