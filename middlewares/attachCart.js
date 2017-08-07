@@ -8,9 +8,9 @@ module.exports = function(req,res,next){
         cart.items.forEach(function(item){
           total+=item.quantity;
         });
-        res.locals.cart = total;
+        res.locals.total = total;
       } else {
-        res.locals.cart = 0;
+        res.locals.total = 0;
       }
       next();
     });

@@ -1,8 +1,11 @@
 var router = require('express').Router();
 var Product = require('../models/product');
 var Cart = require('../models/cart');
+var User = require('../models/user');
 var elasticConfig = require('../libs/elasticConfig');
-var stripe = require('stripe')('sk_test_kTg6IafxY2wEljjiWCGKX9E1');
+var config = require('../config');
+var stripe = require('stripe')(config.get('stripe:sk'));
+var async = require('async');
 
 //Elastic search configuration
 elasticConfig(Product);
@@ -66,17 +69,19 @@ module.exports = function() {
       });
     });
   });
-  router.post('/product/:id',function(req,res,next){
-    Cart.findOne({owner:req.user._id}, function(err,cart){
-      if(err) return next(err);
+  router.post('/product/:id', function(req, res, next) {
+    Cart.findOne({
+      owner: req.user._id
+    }, function(err, cart) {
+      if (err) return next(err);
       cart.items.push({
-        item:req.body.product_id,
-        price:parseFloat(req.body.priceValue),
-        quantity:parseInt(req.body.quantity)
+        item: req.body.product_id,
+        price: parseFloat(req.body.priceValue),
+        quantity: parseInt(req.body.quantity)
       });
       cart.total = (cart.total + parseFloat(req.body.priceValue)).toFixed(2);
-      cart.save(function(err){
-        if(err) return next(err);
+      cart.save(function(err) {
+        if (err) return next(err);
         return res.redirect('/cart');
       });
     });
@@ -102,44 +107,87 @@ module.exports = function() {
         });
       });
   });
-  router.get('/cart',function(req,res,next){
+  router.get('/cart', function(req, res, next) {
     Cart
-      .findOne({owner:req.user._id})
+      .findOne({
+        owner: req.user._id
+      })
       .populate('items.item')
-      .exec(function(err,cart){
-        if(err) return next(err);
-        res.render('main/cart',{
-          shoppingCart:cart,
-          message:req.flash('remove')
+      .exec(function(err, cart) {
+        if (err) return next(err);
+        res.render('main/cart', {
+          cart: cart,
+          message: req.flash('remove'),
+          pk:config.get('stripe:pk')
         });
       });
   });
-  router.post('/remove',function(req,res,next){
-    Cart.findOne({owner:req.user._id},function(err, foundCart){
-      if(err) return next(err);
+  router.post('/remove', function(req, res, next) {
+    Cart.findOne({
+      owner: req.user._id
+    }, function(err, foundCart) {
+      if (err) return next(err);
       foundCart.items.pull(String(req.body.itemId));
-      foundCart.total = (foundCart.total-parseFloat(req.body.price)).toFixed(2);
-      foundCart.save(function(err){
-        if(err) return next(err);
-        req.flash('remove','Successfully removed');
+      foundCart.total = (foundCart.total - parseFloat(req.body.price)).toFixed(2);
+      foundCart.save(function(err) {
+        if (err) return next(err);
+        req.flash('remove', 'Successfully removed');
         res.redirect('/cart');
       });
     });
   });
-
-  router.post('/payment',function(req,res,next){
-    var stripeToken = req.body.stripeToken;
-    var currentCharges = Math.round(req.body.stripeMoney * 100);
-    stripe.customers.create({
-      source:stripeToken
-    }).then(function(customer){
-      return stripe.charges.create({
-        amount:currentCharges,
-        currency:'usd',
-        customer:customer.id
+  router.post('/charge', function(req, res) {
+    var token = req.body.stripeToken;
+    var chargeAmount = Math.round(req.body.chargeAmount * 100);
+    stripe.charges.create({
+      amount: chargeAmount,
+      currency: "usd",
+      source: token
+    }).then(function(charge){
+      async.waterfall([
+        function(callback){
+          Cart.findOne({owner:req.user._id},function(err, cart){
+            callback(err,cart);
+          });
+        },
+        function(cart,callback){
+          User.findOne({_id:req.user._id},function(err, user){
+            if(user){
+              cart.items.forEach(function(item){
+                user.history.push({
+                  item:item.item,
+                  paid:item.price
+                });
+              });
+              user.save(function(err,user){
+                if(err) return callback(err);
+                callback(null,user);
+              });
+            }
+          });
+        },
+        function(user,callback){
+          Cart.update({owner:user._id}, {
+            $set:{
+              items:[],
+              total:0
+            }
+          },function(err, updated){
+            if(updated){
+              callback(null);
+            } else {
+              callback(err);
+            }
+          });
+        }
+      ], function(err,result){
+        if(err){
+          return next(err);
+        } else {
+          res.redirect('/profile');
+        }
       });
     });
-    res.redirect('/profile');
   });
   return router;
 };

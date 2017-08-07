@@ -12,5 +12,9 @@
       "httpOnly": true,
       "maxAge": null
     }
+  },
+  "stripe":{
+    "pk":"pk_test_Gdeyxm2ZDVkAEuQt8w75jNWb",
+    "sk":"sk_test_kTg6IafxY2wEljjiWCGKX9E1"
   }
 }

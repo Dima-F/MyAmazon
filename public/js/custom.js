@@ -1,9 +1,7 @@
-$(function() {
-  Stripe.setPublishableKey('pk_test_Gdeyxm2ZDVkAEuQt8w75jNWb');
 
+$(function() {
   $('#search').keyup(function() {
     var search_term = $(this).val();
-
     $.ajax({
       method: 'POST',
       url: '/api/search',
@@ -62,31 +60,6 @@ $(function() {
     $('#quantity').val(quantity);
     $('#priceValue').val(priceValue.toFixed(2));
     $('#total').html(quantity);
-  });
-
-  function stripeResponseHandler(status, response) {
-    var $form = $('#payment-form');
-    if (response.error) {
-      $form.find('.payment-errors').text(response.error.message);
-      $form.find('button').prop('disabled', false);
-      //$form.get(0).submit();
-    } else {
-      //response contains id and card, which contains additional card details
-      var token = response.id;
-      //insert token into the form;
-      $form.append($('<input type="hidden" name="stripeToken"/>').val(token));
-      //and submit
-      $form.get(0).submit();
-    }
-  }
-
-  $('#payment-form').on('submit', function(event) {
-    var $form = $(this);
-    //prevent repeated clicks
-    $form.find('button').prop('disabled', true);
-    Stripe.card.createToken($form, stripeResponseHandler);
-    //prevent default form submitting
-    return false;
   });
 
 });
