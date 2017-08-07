@@ -69,6 +69,7 @@ $(function() {
     if (response.error) {
       $form.find('.payment-errors').text(response.error.message);
       $form.find('button').prop('disabled', false);
+      //$form.get(0).submit();
     } else {
       //response contains id and card, which contains additional card details
       var token = response.id;
@@ -79,7 +80,7 @@ $(function() {
     }
   }
 
-  $('#payment-form').submit(function(event) {
+  $('#payment-form').on('submit', function(event) {
     var $form = $(this);
     //prevent repeated clicks
     $form.find('button').prop('disabled', true);

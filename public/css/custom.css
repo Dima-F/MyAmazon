@@ -11,3 +11,7 @@ footer {
 .product-image {
   width:100%;
 }
+.payment-errors {
+  color:red;
+  padding-top:5px;
+}
