@@ -16,5 +16,11 @@
   "stripe":{
     "pk":"pk_test_Gdeyxm2ZDVkAEuQt8w75jNWb",
     "sk":"sk_test_kTg6IafxY2wEljjiWCGKX9E1"
+  },
+  "facebook":{
+    "clientID":"1095099113960703",
+    "clientSecret":"b4ba0a97d531a7b6c5d2870cca8f480e",
+    "profileFields":["emails","displayName"],
+    "callbackURL":"http://localhost:3000/auth/facebook/callback"
   }
 }

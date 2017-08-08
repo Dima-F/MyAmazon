@@ -69,5 +69,13 @@ module.exports = function(passport){
 		req.logout();
 		res.redirect('/');
 	});
+	/* facebook authentication */
+	router.get('/auth/facebook',passport.authenticate('facebook-login',{
+		scope:'email'
+	}));
+	router.get('/auth/facebook/callback',passport.authenticate('facebook-login',{
+		successRedirect:'/profile',
+		failureRedirect:'/login'
+	}));
   return router;
 };

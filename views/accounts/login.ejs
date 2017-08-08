@@ -1,30 +1,34 @@
 <%- layout('layout') -%>
-<div class="container">
-  <div class="row">
-    <div class="col-lg-4 col-lg-offset-4">
-      <% if(message.length>0) { %>
-        <div class="alert alert-danger alert-dismissible">
-          <%- message %>
-          <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-        </div>
-      <% } %>
-      <form method="post">
-          <h2 class="form-signin-heading">Please log in</h2>
-          <div class="form-group">
-            <label for="inputEmail">Email address</label>
-            <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-4 col-lg-offset-4">
+        <% if(message.length>0) { %>
+          <div class="alert alert-danger alert-dismissible">
+            <%- message %>
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
           </div>
-          <div class="form-group">
-            <label for="inputPassword">Password</label>
-            <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
-          </div>
-          <div class="checkbox">
-            <label>
+          <% } %>
+            <form method="post">
+              <h2 class="form-signin-heading">Please log in</h2>
+              <div class="form-group">
+                <label for="inputEmail">Email address</label>
+                <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required>
+              </div>
+              <div class="form-group">
+                <label for="inputPassword">Password</label>
+                <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
+              </div>
+              <div class="checkbox">
+                <label>
               <input type="checkbox" value="remember-me"> Remember me
             </label>
-          </div>
-          <button class="btn btn-lg btn-primary" type="submit">Log in</button>
-        </form>
+              </div>
+              <button class="btn btn-lg btn-primary" type="submit">Log in</button>
+            </form>
+            <br/>
+            <a class="btn btn-block btn-social btn-facebook" href='/auth/facebook'>
+              <i class="fa fa-facebook"></i> Sign in with Facebook
+            </a>
+      </div>
     </div>
   </div>
-</div>

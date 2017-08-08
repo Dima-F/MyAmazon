@@ -1,4 +1,5 @@
 var login = require('./login-local');
+var loginFacebook = require('./login-facebook');
 var signup = require('./signup-local');
 var User = require('../models/user');
 
@@ -19,5 +20,6 @@ module.exports = function(passport){
 
     // Setting up Passport Strategies for Login and SignUp/Registration
     login(passport);
+    loginFacebook(passport);
     signup(passport);
 };
