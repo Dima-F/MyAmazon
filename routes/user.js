@@ -35,7 +35,13 @@ module.exports = function(passport){
 	}));
   /* GET profile Page */
   router.get('/profile', isAuthenticated, function(req, res){
-		res.render('accounts/profile', { user: req.user });
+		User
+			.findOne({_id:req.user._id})
+			.populate('history.item')
+			.exec(function(err,foundUser){
+				if(err) return next(err);
+				res.render('accounts/profile', { user: foundUser});
+			});
 	});
 	/* GET edit-profile Page */
 	router.get('/edit-profile',isAuthenticated, function(req,res){
