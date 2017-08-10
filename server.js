@@ -75,7 +75,7 @@ app.use(function(err, req, res, next) {
   console.error(err);
 });
 
-app.listen(config.get('port'),function(err){
+app.listen(process.env.PORT || config.get('port'),function(err){
   if(err) throw err;
   console.log('Server running on port '+config.get('port'));
 });
