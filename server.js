@@ -33,7 +33,7 @@ app.use(session({
     saveUninitialized: true,
     resave: 'true',
     secret: config.get('session:secret'),
-    store:new MongoStore({url:config.get('mongoose:local'),autoReconnect:true})
+    store:new MongoStore({url:config.get('mongoose:remote'),autoReconnect:true})
 }));
 app.use(flash());
 app.use(passport.initialize());

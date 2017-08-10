@@ -11,8 +11,11 @@ module.exports = function() {
         Category.findOne({
           name: req.params.name
         }, function(err, category) {
-          if (err) return next(err);
-          callback(null, category);
+          if(!category){
+            callback(new Error());
+          } else {
+            callback(err,category);
+          }
         });
       },
       function(category, callback) {
@@ -25,9 +28,16 @@ module.exports = function() {
           product.save();
         }
       }
-    ]);
-    res.json({
-      message: 'Success'
+    ],function(err,result){
+      if(err){
+        return res.json({
+          message:'Some error occured!'
+        });
+      } else {
+        return res.json({
+          message: 'Success'
+        });
+      }
     });
   });
 
@@ -42,6 +52,5 @@ module.exports = function() {
       res.json(results);
     });
   });
-
   return router;
 };
