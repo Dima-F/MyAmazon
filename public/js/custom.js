@@ -10,20 +10,17 @@ $(function() {
       },
       dataType: 'json',
       success: function(results) {
-        var data = results.hits.hits.map(function(hit) {
-          return hit;
-        });
         $('#searchResults').empty();
-        data.forEach(function(val) {
+        results.forEach(function(val) {
           var html = "";
           html += '<div class="col-md-4">';
           html += '<a href="/product/' + val._id + '">';
           html += '<div class="thumbnail">';
-          html += '<img src="' + val._source.image + '">';
+          html += '<img src="' + val.image + '">';
           html += '<div class="caption">';
-          html += '<h3>' + val._source.name + '</h3>';
-          html += '<p>' + val._source.category.name + '</p>';
-          html += '<p>$' + val._source.price + '</p>';
+          html += '<h3>' + val.name + '</h3>';
+          html += '<p>' + val.category.name + '</p>';
+          html += '<p>$' + val.price + '</p>';
           html += '</div></div></a></div>';
 
           $('#searchResults').append(html);

@@ -2,13 +2,13 @@ var router = require('express').Router();
 var Product = require('../models/product');
 var Cart = require('../models/cart');
 var User = require('../models/user');
-var elasticConfig = require('../libs/elasticConfig');
+//var elasticConfig = require('../libs/elasticConfig');
 var config = require('../config');
 var stripe = require('stripe')(config.get('stripe:sk'));
 var async = require('async');
 
 //Elastic search configuration
-elasticConfig(Product);
+//elasticConfig(Product);
 
 function paginate(req, res, next) {
   var perPage = 9;
@@ -91,6 +91,7 @@ module.exports = function() {
     res.redirect('/search?q=' + req.body.q);
   });
   router.get('/search', function(req, res, next) {
+    /*
     Product.search({
         query_string: {
           query: req.query.q
@@ -105,7 +106,17 @@ module.exports = function() {
           query: req.query.q,
           data: data
         });
-      });
+      });*/
+      Product.find({$text:{$search:req.query.q}},{score:{$meta:'textScore'}})
+        .sort({score:{$meta:'textScore'}})//sorting by relevant match
+        .populate('category')
+        .exec(function(err,results){
+          if (err) return next(err);
+          res.render('main/search-result', {
+            query: req.query.q,
+            data: results
+          });
+        });
   });
   router.get('/cart', function(req, res, next) {
     Cart

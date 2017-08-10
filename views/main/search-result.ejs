@@ -3,20 +3,20 @@
     <% if(data.length===0) { %>
       <h3>Search not found</h3>
       <% } else { %>
-        <h3>Results for <%= query %></h3>
+        <h3>Results for '<%= query %>':</h3>
         <div class="row">
           <% data.forEach(function(product){ %>
             <div class="col-md-4">
               <a href="/product/<%= product._id %>">
                 <div class="thumbnail">
-                  <img src="<%= product._source.image %>">
+                  <img src="<%= product.image %>">
                   <div class="caption">
-                    <h3><%= product._source.name %></h3>
+                    <h3><%= product.name %></h3>
                     <p>
-                      <%= product._source.category.name %>
+                      <%= product.category.name %>
                     </p>
                     <p>
-                      $<%= product._source.price %>
+                      $<%= product.price %>
                     </p>
                   </div>
                 </div>

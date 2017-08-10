@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var mongoosastic = require('mongoosastic');
+//var mongoosastic = require('mongoosastic');
 
 var ProductSchema = new mongoose.Schema({
   category:{type:mongoose.Schema.Types.ObjectId,ref:'Category'},
@@ -7,10 +7,11 @@ var ProductSchema = new mongoose.Schema({
   price:Number,
   image:String
 });
-
-ProductSchema.plugin(mongoosastic, {
+//creating index for full text search
+ProductSchema.index({'category':'text','name':'text'});
+/*ProductSchema.plugin(mongoosastic, {
   hosts:[
     'localhost:9200'
   ]
-});
+});*/
 module.exports = mongoose.model('Product',ProductSchema);

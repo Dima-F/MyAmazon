@@ -14,7 +14,11 @@ module.exports = function() {
           if(!category){
             callback(new Error());
           } else {
-            callback(err,category);
+            if(err){
+              callback(err);
+            } else {
+              callback(null,category);
+            }
           }
         });
       },
@@ -27,6 +31,7 @@ module.exports = function() {
           product.image = faker.image.image();
           product.save();
         }
+        callback(null,'Success!');
       }
     ],function(err,result){
       if(err){
@@ -35,7 +40,7 @@ module.exports = function() {
         });
       } else {
         return res.json({
-          message: 'Success'
+          message: result,
         });
       }
     });
@@ -43,14 +48,21 @@ module.exports = function() {
 
   router.post('/search', function(req, res, next) {
     console.log(req.body.search_term);
-    Product.search({
+    /*Product.search({
       query_string: {
         query: req.body.search_term
       }
     }, function(err, results) {
       if (err) return next(err);
       res.json(results);
-    });
+    });*/
+    Product.find({$text:{$search:req.body.search_term}},{score:{$meta:'textScore'}})
+      .sort({score:{$meta:'textScore'}})//sorting by relevant match
+      .populate('category')
+      .exec(function(err,results){
+        if (err) return next(err);
+        res.json(results);
+      });
   });
   return router;
 };
