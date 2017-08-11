@@ -4,21 +4,21 @@
 ## Overview
 This is Node.js + Express ecommerce web application.
 
-You can find this working app at https://herocu.blabla.bla.
+You can find this working app at __https://f-myamazon.herokuapp.com__
 
 
-## Prerequisites
+## Frameworks & Tools used in project:
 
-### Git
-
-- A good place to learn about setting up git is [here][git-setup].
-- You can find documentation and download git [here][git-home].
-
-### Node.js and Tools
-
-- Get [Node.js][node-download].
-- Install the tool dependencies: `npm install`
-
+- Node.js & Express
+- MongoDB
+- Bootstrap & jquery
+- Ejs template engine
+- Stripe API
+- Facebook API
+- ElasticSearch (in deployed version - mongodb's full text search)
+- bcrypt & crypto encoding libraries
+- faker
+- async and other libraries...
 
 ## Contact
 
