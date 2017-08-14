@@ -22,5 +22,17 @@
     "clientSecret":"b4ba0a97d531a7b6c5d2870cca8f480e",
     "profileFields":["emails","displayName"],
     "callbackURL":"http://localhost:3000/auth/facebook/callback"
+  },
+  "mailer":{
+    "service":"Gmail",
+    "auth": {
+      "user":"myamazone2@gmail.com",
+      "pass": "123amazon"
+    },
+    "mailOptions":{
+      "from":"myamazone2@gmail.com",
+      "to":"dafw@live.ru",
+      "subject": "Hello from MyAmazon ✔"
+    }
   }
 }

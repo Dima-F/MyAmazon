@@ -6,6 +6,7 @@ var User = require('../models/user');
 var config = require('../config');
 var stripe = require('stripe')(config.get('stripe:sk'));
 var async = require('async');
+var mailer = require('../libs/mailer');
 
 //Elastic search configuration
 //elasticConfig(Product);
@@ -155,6 +156,13 @@ module.exports = function() {
       currency: "usd",
       source: token
     }).then(function(charge){
+      //sending email
+      mailer({
+        to:req.user.email,
+        subject:"Charge email notification",
+        text:"You successfully bought items on "+req.body.chargeAmount+"$",
+        html:"<p>You became poorer on <b>"+ req.body.chargeAmount + "$</b></p>"
+      });
       async.waterfall([
         function(callback){
           Cart.findOne({owner:req.user._id},function(err, cart){
@@ -195,7 +203,7 @@ module.exports = function() {
         if(err){
           return next(err);
         } else {
-          res.redirect('/profile');
+          return res.redirect('/profile');
         }
       });
     });
